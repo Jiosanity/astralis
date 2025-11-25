@@ -24,7 +24,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "18" # 使用 README 推荐的 v16+
+          node-version: "18"
           cache: 'npm'
 
       - name: Install dependencies
@@ -32,11 +32,13 @@ jobs:
 
       - name: Build
         run: npm run build
+        env: # 关键修改：将 GitHub Secret 注入到构建环境中
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist # 这里的路径对应 README 说的构建输出目录
+          path: ./dist
 
   deploy:
     environment:
